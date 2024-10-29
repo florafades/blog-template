@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 #used to import json file of blog posts
 import requests
@@ -10,6 +10,8 @@ posts = requests.get("https://api.npoint.io/a31c7e2c5f7dce0e8ecf",  verify=False
 # for post in posts:
 #     print(post["title"])
 #     print(post["subtitle"])
+
+#Update the code in contact.html and main.py so that you print the information the user has entered into the form and return a <h1> that says "Successfully sent your message". e.g.
 
 app = Flask(__name__)
 
@@ -25,6 +27,17 @@ def about():
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
+
+@app.route("/form-entry", methods=["POST"])
+def receive_data():
+    #['pwd'] is connected to index.html --> <label for="pwd"> and <input id="pwd">
+    name_input = request.form['name']
+    email_input = request.form['email']
+    phone_input = request.form['phone']
+    print(name_input)
+    print(email_input)
+    print(phone_input)
+    return "Successfully sent your message"
 
 @app.route("/post/<int:index>")
 def show_post(index):
