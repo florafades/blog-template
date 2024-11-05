@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request
-
 #used to import json file of blog posts
 import requests
+#used to send email to site owner (me)
+import smtplib
+
+app = Flask(__name__)
 
 # use api where the json file is stored for the blog posts
 posts = requests.get("https://api.npoint.io/a31c7e2c5f7dce0e8ecf",  verify=False).json()
+MY_EMAIL = "masarwer@outlook.com"
+MY_PASSWORD = ""
 
 #working for loop will be re-fromatted using Jinja formatting and put into index.html
 # for post in posts:
@@ -12,8 +17,6 @@ posts = requests.get("https://api.npoint.io/a31c7e2c5f7dce0e8ecf",  verify=False
 #     print(post["subtitle"])
 
 #Update the code in contact.html and main.py so that you print the information the user has entered into the form and return a <h1> that says "Successfully sent your message". e.g.
-
-app = Flask(__name__)
 
 #/ refers to home page
 @app.route("/")
@@ -24,20 +27,27 @@ def  get_all_posts():
 def about():
     return render_template("about.html")
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
+    if request.method == "POST":
+        data = request.form
+        print(data["name"])
+        print(data["email"])
+        print(data["phone"])
+        print(data["message"])
+        return "<h1>Message sent successfully</h1>"
     return render_template("contact.html")
 
-@app.route("/form-entry", methods=["POST"])
-def receive_data():
-    #['pwd'] is connected to index.html --> <label for="pwd"> and <input id="pwd">
-    name_input = request.form['name']
-    email_input = request.form['email']
-    phone_input = request.form['phone']
-    print(name_input)
-    print(email_input)
-    print(phone_input)
-    return "Successfully sent your message"
+# @app.route("/form-entry", methods=["POST"])
+# def receive_data():
+#     #['pwd'] is connected to index.html --> <label for="pwd"> and <input id="pwd">
+#     name_input = request.form['name']
+#     email_input = request.form['email']
+#     phone_input = request.form['phone']
+#     print(name_input)
+#     print(email_input)
+#     print(phone_input)
+#     return "Successfully sent your message"
 
 @app.route("/post/<int:index>")
 def show_post(index):
@@ -48,8 +58,6 @@ def show_post(index):
         if x["id"] == index:
             requested_post = x
     return render_template("post.html", post=requested_post)
-
-
 
 
 if __name__ == "__main__":
