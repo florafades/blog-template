@@ -47,32 +47,10 @@ def contact():
 
 def send_email(name, email, phone, message):
     email_message = f"Subject:New Message\n\nName: {name}\nEmail: {email}\nPhone: {phone}\nMessage:{message}"
-    with smtplib.SMTP("smtp.gmail.com") as connection:
-        connection.starttls()
-        connection.login(MY_EMAIL, MY_PASSWORD)
-        connection.sendmail(MY_EMAIL, MY_EMAIL, email_message)
-
-# @app.route("/form-entry", methods=["POST"])
-# def receive_data():
-#     #['pwd'] is connected to index.html --> <label for="pwd"> and <input id="pwd">
-#     name_input = request.form['name']
-#     email_input = request.form['email']
-#     phone_input = request.form['phone']
-#     print(name_input)
-#     print(email_input)
-#     print(phone_input)
-#     return "Successfully sent your message"
-
-# @app.route("/post/<int:index>")
-# def show_post(index):
-#     #set up empty python variable
-#     requested_post = None
-#     #loop through posts to find the id # that matches the <int:index>
-#     for x in posts:
-#         if x["id"] == index:
-#             requested_post = x
-#     return render_template("post.html", post=requested_post)
-
+    with smtplib.SMTP("smtp.gmail.com") as smtp:
+        smtp.starttls()
+        smtp.login(MY_EMAIL, MY_PASSWORD)
+        smtp.sendmail(MY_EMAIL, MY_EMAIL, email_message)
 
 if __name__ == "__main__":
     #debug auto reloads server --> good
